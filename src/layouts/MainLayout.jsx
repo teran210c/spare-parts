@@ -5,11 +5,11 @@ import Lines from "../pages/Lines";
 
 export default function MainLayout ({ children }) {
     return (
-        <div>
-            <Navbar />
-            <div className="flex">
-                <Sidebar/>
-                <main>
+        <div className="flex min-h-screen">
+            <Sidebar/>
+            <div className="flex flex-col flex-1">
+                <Navbar />
+                <main className="flex-1">
                     {children}
                 </main>
             </div>

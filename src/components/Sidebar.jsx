@@ -1,7 +1,7 @@
 export default function Sidebar() {
     return (
         <div>
-            navbbar
+            Sidebar
         </div>
     )
 }
