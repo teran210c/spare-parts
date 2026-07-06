@@ -4,12 +4,24 @@ import { useParams } from "react-router-dom"
 export default function MachineDetails() {
     const { lineId, machine } = useParams()
     const [searchTerm, setSearchTerm] = useState("")
+    const [selectedPart, setSelectedPart] = useState(null)
 
     const parts = [
-        { partNumber: "MCH-00123", partName: "Motor" },
-        { partNumber: "MCH-00123", partName: "Motor" },
-        { partNumber: "MCH-00123", partName: "Motor" }
+        { partNumber: "MCH-00123", partName: "Motor Charger" },
+        { partNumber: "SEN-00456", partName: "Optic Sensor" },
+        { partNumber: "BEL-00789", partName: "Belt Conveyor" },
+        { partNumber: "PLC-01234", partName: "PLC Driver" },
+        { partNumber: "PWR-05678", partName: "Power Source" },
+        { partNumber: "ROL-00987", partName: "Transporting Roll" }
+        
     ]
+
+    const filteredBoard = parts.filter((part) => {
+        return (
+            part.partNumber.toLowerCase().startsWith(searchTerm.toLowerCase())
+        )
+    }
+    )
 
     return (
         <div>
@@ -32,7 +44,7 @@ export default function MachineDetails() {
                     </div>
                 </form >
                 <ul>
-                    {parts.map((part, index) => (
+                    {filteredBoard.map((part, index) => (
                         <li
                             key={index}
                             className="m-2 p-3 bg-gray-300 w-50 cursor-pointer"
