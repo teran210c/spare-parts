@@ -7,7 +7,7 @@ export default function Lines() {
 
     console.log(activeLine)
     return (
-        <div className="flex flex-1 min-h-screen items-center">
+        <div className="flex flex-1 min-h-screen items-center justify-center">
             <ul>
                 {lines.map((line, index) => (
                     <li
