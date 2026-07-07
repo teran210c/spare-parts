@@ -6,6 +6,7 @@ import Machines from './pages/Machines.jsx'
 import Lines from './pages/Lines.jsx'
 import MainLayout from './layouts/MainLayout.jsx'
 import MachineDetails from './pages/MachineDetails.jsx'
+import '@fontsource/inter'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
