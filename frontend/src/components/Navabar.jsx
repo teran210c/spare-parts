@@ -1,6 +1,6 @@
 export default function Navbar() {
     return (
-        <div>
+        <div className="bg-gray-300">
             navbar
         </div>
     )

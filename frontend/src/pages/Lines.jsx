@@ -15,7 +15,7 @@ export default function Lines() {
                 {lines.map((line, index) => (
                     <li
                         key={index}
-                        className="m-4 p-3 bg-gray-300 w-50 cursor-pointer"
+                        className="m-4 p-3 bg-gray-300 w-50 rounded-sm cursor-pointer"
                         onMouseEnter={() => setActiveLine(line)}
                         onMouseLeave={() => setActiveLine(null)}
                         onClick={() => navigate(`/line/${line}`)}
