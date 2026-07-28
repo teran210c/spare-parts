@@ -1,71 +1,54 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
 export default function MachineDetails() {
-    const { lineId, machine } = useParams()
+    const { lineId, machineId } = useParams()
     const [searchTerm, setSearchTerm] = useState("")
+    const [spareParts, setSpareParts] = useState([]);
+    const [loading, setLoading] = useState(true)
     const [selectedPart, setSelectedPart] = useState(null)
 
-    const parts = [
-        {
-            partNumber: "MCH-00123",
-            partName: "Motor Charger",
-            category: "Mechanical",
-            location: "Charger",
-            description: "Motor for machine engine",
-            supplier: [
-                {
-                    name: "PEGATRON SUPPLY",
-                    supplierPartNumber: 'MCH-00123-PG',
-                    deliverytime: "5-7 days",
-                    contact: "provider@email.com"
-                },
-                {
-                    name: "MISUMI",
-                    supplierPartNumber: 'MCH-00123-MS',
-                    deliverytime: "7-10 days",
-                    contact: "provider@misumi.com"
-                },
-                {
-                    name: "MOUSER",
-                    supplierPartNumber: 'MCH-00123-MR',
-                    deliverytime: "3-5 days",
-                    contact: "provider@mouser.com"
-                }
+    useEffect(() => {
+            const fetchSpareParts = async () => {
+                if (!machineId) return;
+            
+            try {
+                // Llamamos al endpoint filtrado por el ID de la máquina
+                const response = await fetch(`http://localhost:5267/api/sparepart/machine/${machineId}`);
+                if (!response.ok) throw new Error("Error al traer los repuestos")
+                
+                const data = await response.json();
+                setSpareParts(data);
+            } catch (error) {
+                console.error("Error en la petición de repuestos:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+            fetchSpareParts()
+    }, [machineId])
 
-            ],
-            voltage: 24,
-            power: 120,
-            speed: 3000,
-            torque: 0.38,
-            type: "Sterpper Motor"
+    console.log(spareParts)
+    
 
-        },
-        { partNumber: "SEN-00456", partName: "Optic Sensor" },
-        { partNumber: "BEL-00789", partName: "Belt Conveyor" },
-        { partNumber: "PLC-01234", partName: "PLC Driver" },
-        { partNumber: "PWR-05678", partName: "Power Source" },
-        { partNumber: "ROL-00987", partName: "Transporting Roll" }
-
-    ]
-
-    const filteredBoard = parts.filter((part) => {
+    const filteredBoard = spareParts.filter((part) => {
         return (
-            part.partNumber.toLowerCase().startsWith(searchTerm.toLowerCase()) || part.partName.toLowerCase().startsWith(searchTerm.toLowerCase())
+            part.name.toLowerCase().startsWith(searchTerm.toLowerCase()) || part.serialNumber.startsWith()
         )
     }
     )
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center pb-4">
             <div className="flex flex-col items-center justify-center">
                 <h1 className="m-4 text-5xl">{lineId}</h1>
-                <h3 className="text-xl">{machine}</h3>
+                {/* <h3 className="text-xl">{machine}</h3> */}
             </div>
             <div className="flex w-5/6 mt-8">
-                <div>
+                <div className="h-dvh w-180 overflow-y-auto ">
                     <form
                         onSubmit={e => e.preventDefault()}
+                        
                     >
                         <div className="flex items-center border pl-3 pr-3 gap-2 bg-white border-gray-500/30 h-[30px] rounded-md overflow-hidden w-80">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 30 30" fill="#6B7280">
@@ -80,103 +63,55 @@ export default function MachineDetails() {
                         </div>
                     </form >
                     <ul>
-                        {filteredBoard.map((part, index) => (
+                        {filteredBoard.map((part) => (
                             <li
-                                key={index}
+                                key={part.id}
                                 className="mt-3 p-3 bg-gray-300 flex-1 cursor-pointer"
                                 onClick={() => setSelectedPart(part)}
                             >
-                                <h1>{part.partNumber}</h1>
-                                <h4>{part.partName}</h4>
+                                <h1>{part.name}</h1>
+                                <h4>{part.serialNumber}</h4>
 
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div className="flex ml-10 bg-gray-50 mr-8">
-
-
                     {selectedPart && (
-                        <div className="ml-6 pr-16">
+                        <div className="flex flex-col w-full h-auto mx-8 inset-shadow-sm px-8 py-4 rounded-sm">
                             <div>
-                                <div>
-                                    <h1 className="text-3xl font-bold m-2">{selectedPart.partNumber}</h1>
-                                    <h5 className="font-bold m-2">{selectedPart.partName}</h5>
-                                </div>
-                                <div className="flex">
-                                    <h1 className="m-2">Category</h1>
-                                    <h5 className="m-2">{selectedPart.category}</h5>
-                                </div>
-                                <div className="flex">
-                                    <p className="m-2">Description</p>
-                                    <p className="m-2">{selectedPart.description}</p>
-                                </div>
-
+                                <h1 className="text-3xl font-bold font-mono text-black-400">{selectedPart.serialNumber}</h1>
+                                <h5 className="text-xl font-semibold mt-1 text-gray-600">{selectedPart.name}</h5>
                             </div>
-                            <div>
-                                <h3 className="text-lg font-semibold mt-6 mb-3">
-                                    SUPPLIERS
-                                </h3>
-                                <table className="w-full table-fixed border-collapse">
-                                    <thead>
-                                        <tr className="border-b  border-gray-300 text-left text-sm text-gray-500">
-                                            <th className="w-1/4 py-2">Supplier</th>
-                                            <th className="w-1/4 py-2">Part Number</th>
-                                            <th className="w-1/4 py-2">Delivery Time</th>
-                                            <th className="w-1/4 py-2">Contact</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
 
-                                        {selectedPart.supplier.map((part, index) => (
-                                            <tr
-                                                key={index}
-                                                className="border-b border-gray-300"
-                                            >
-                                                <td className="py-3">
-                                                    {part.name}
-                                                </td>
-                                                <td>
-                                                    {part.supplierPartNumber}
-                                                </td>
-                                                <td>
-                                                    {part.deliverytime}
-                                                </td>
-                                                <td>
-                                                    {part.contact}
-                                                </td>
-                                            </tr>
-                                        ))}
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div>
+                            <div className="mt-6 space-y-3 border-t border-slate-400 pt-4 text-sm">
                                 <div className="flex">
-                                    <h1 className="m-2">Voltage</h1>
-                                    <h5 className="m-2">{selectedPart.voltage}</h5>
+                                    <span className="w-32 text-gray-600 font-semibold">Modelo:</span>
+                                    <span>{selectedPart.model || "N/A"}</span>
                                 </div>
                                 <div className="flex">
-                                    <h1 className="m-2">Power</h1>
-                                    <h5 className="m-2">{selectedPart.power}</h5>
+                                    <span className="w-32 text-gray-600 font-semibold">Proveedor:</span>
+                                    <span>{selectedPart.source || "N/A"}</span>
                                 </div>
                                 <div className="flex">
-                                    <h1 className="m-2">Speed</h1>
-                                    <h5 className="m-2">{selectedPart.speed}</h5>
+                                    <span className="w-32 text-gray-600 font-semibold">Dueño:</span>
+                                    <span>{selectedPart.owner || "N/A"}</span>
                                 </div>
                                 <div className="flex">
-                                    <h1 className="m-2">Torque</h1>
-                                    <h5 className="m-2">{selectedPart.voltage}</h5>
+                                    <span className="w-32 text-gray-600 font-semibold">Encargado:</span>
+                                    <span>{selectedPart.clerk || "N/A"}</span>
                                 </div>
                                 <div className="flex">
-                                    <h1 className="m-2">Type</h1>
-                                    <h5 className="m-2">{selectedPart.type}</h5>
+                                    <span className="w-32 text-gray-600 font-semibold">Cantidad:</span>
+                                    <span className="font-bold text-emerald-400">{selectedPart.quantity} piezas</span>
+                                </div>
+                                <div className="flex">
+                                    <span className="w-32 text-gray-600 font-semibold">Tiempo de Vida:</span>
+                                    <span>{selectedPart.lifeTime ? `${selectedPart.lifeTime} año(s)` : "N/A"}</span>
                                 </div>
                             </div>
                         </div>
                     )}
-
-                </div>
+                
             </div>
         </div>
     )

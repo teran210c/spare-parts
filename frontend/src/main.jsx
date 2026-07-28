@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Lines />} />
           <Route path="line/:lineId" element={<Machines />} />
-          <Route path="line/:lineId/:machine" element={<MachineDetails />} />
+          <Route path="line/:lineId/:machineId" element={<MachineDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>
