@@ -11,6 +11,7 @@ export default function smtLines() {
     const [activeLine, setActiveLine] = useState(null)
     const navigate = useNavigate()
     const lines = ["SMT-L5", "SMT-L3", "SMT-L2", "SMT-L1"]
+    const [currentImage, setCurrentImage] = useState(null)
 
     const iconUrl = Chip
 
@@ -21,7 +22,16 @@ export default function smtLines() {
         "SMT-L1": SMTL1
     }
 
-    const currentImage = activeLine ? imageMap[activeLine] : Neutral
+
+    useEffect(() => {
+        if (activeLine && imageMap[activeLine]) {
+            setCurrentImage(imageMap[activeLine])
+        } else {
+            setCurrentImage(Neutral)
+        }
+    }, [activeLine])
+
+   
 
     return (
         <div className="flex justify-center">
