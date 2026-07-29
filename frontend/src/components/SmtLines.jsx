@@ -29,7 +29,7 @@ export default function smtLines() {
                 {lines.map((line, index) => (
                     <li
                         key={index}
-                        className="flex h-16 w-64 mb-4 mr-4 p-3 bg-gray-50 w-50 rounded-lg shadow-md cursor-pointer"
+                        className="flex items-center h-16 w-64 mb-4 mr-4 p-3 bg-gray-50 w-50 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-lime-50"
                         onMouseEnter={() => setActiveLine(line)}
                         onMouseLeave={() => setActiveLine(null)}
                         onClick={() => navigate(`/line/${line}`)}
