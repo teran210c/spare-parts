@@ -9,7 +9,7 @@ export default function Lines() {
 
 
     return (
-        <div className="flex flex-col mt-12">
+        <div className="flex flex-col">
 
             <div className="flex justify-center mb-10">                
                 <button

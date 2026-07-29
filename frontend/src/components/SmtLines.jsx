@@ -53,7 +53,7 @@ export default function smtLines() {
                 ))}
             </ul>
 
-            <div className="w-1/2 h-1/2 shadow-md">
+            <div className="w-1/2 shadow-lg">
                 <img src={currentImage} alt={activeLine || "neutral lines"} />
             </div>
         </div>

@@ -39,7 +39,7 @@ export default function Navbar() {
                     User
                 </div>
                 <img className="h-full mr-4" src={userIcon} alt="" />
-            <button type="button" class="text-white bg-red-700 box-border border border-transparent hover:bg-red-600 focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-6 py-2.5 focus:outline-none">
+            <button type="button" className="text-white bg-red-700 box-border border border-transparent hover:bg-red-600 focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-6 py-2.5 focus:outline-none">
                 Logout
             </button>
         </div>
