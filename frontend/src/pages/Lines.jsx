@@ -9,8 +9,8 @@ export default function Lines() {
 
 
     return (
-        <div>
-            <div className="flex justify-center mt-4">
+        <div className="flex flex-col mt-12">
+            <div className="flex justify-center mb-12">
                 <button
                     onClick={() => setSelectedDept("SMT")}
                     className={`px-6 py-2.5 bg-[#2d3748] text-white font-semibold rounded-xl border border-transparent shadow-sm transition-all duration-200 hover:bg-[#3a475c] active:scale-95 mr-4 ${selectedDept === "SMT"

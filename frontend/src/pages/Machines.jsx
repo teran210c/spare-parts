@@ -20,10 +20,10 @@ export default function Machines() {
 
     return (
         <>
-            <div className="flex justify-center">
+            <div >
                 <h1>{lineId}</h1>
             </div>
-            <div className="flex">
+            <div>
                 <ul>
                     {machines.map((machine, index) => (
                         <li
