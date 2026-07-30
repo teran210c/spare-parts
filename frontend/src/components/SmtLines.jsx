@@ -34,12 +34,12 @@ export default function smtLines() {
    
 
     return (
-        <div className="flex justify-center">
-            <ul>
+        <div className="flex flex-1 h-full min-h-0">
+            <ul className="overflow-y-auto shrink-0 pr-2">
                 {lines.map((line, index) => (
                     <li
                         key={index}
-                        className="flex items-center h-16 w-64 mb-4 mr-4 p-3 bg-gray-50 w-50 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-lime-50"
+                        className="flex items-center h-16 w-64 mb-4 mr-4 p-3 bg-gray-50 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-lime-50"
                         onMouseEnter={() => setActiveLine(line)}
                         onMouseLeave={() => setActiveLine(null)}
                         onClick={() => navigate(`/line/${line}`)}
@@ -53,8 +53,12 @@ export default function smtLines() {
                 ))}
             </ul>
 
-            <div className="w-1/2 shadow-lg">
-                <img src={currentImage} alt={activeLine || "neutral lines"} />
+            <div className="shadow-lg flex-1 h-full w-full min-w-0 overflow-hidden rounded-lg">
+                <img 
+                    className="max-h-full max-w-full object-contain" 
+                    src={currentImage} 
+                    alt={activeLine || "neutral lines"} 
+                />
             </div>
         </div>
     )

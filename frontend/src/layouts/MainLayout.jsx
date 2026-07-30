@@ -5,24 +5,18 @@ import Sidebar from '../components/Sidebar'
 
 export default function MainLayout() {
   return (
-    // Pantalla completa estricta, evita scrolls raros en el body
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-gray-50 pb-12">
-      
-      {/* Navbar arriba fija (h-16 = 64px) */}
-      <header className="h-16 w-full bg-gray-800 text-white flex-shrink-0">
+
+    <div className='flex flex-col h-screen w-screen flex-col overflow-hidden'>
+       <nav className="h-1/12">
         <Navabar />
-      </header>
+      </nav>
 
-      {/* Contenedor inferior: resta el alto de la navbar */}
-      <div className="flex h-full w-full overflow-hidden">
-        
-
-        {/* El contenedor principal de tus páginas con scroll propio si el contenido crece */}
-        <main className="flex-1 h-full overflow-y-hidden p-6">
-          <Outlet /> 
-        </main>
-
-      </div>
+      <main className="flex-1 min-h-0 bg-gray-50 flex flex-col">
+        <Outlet />        
+      </main>
+      
     </div>
+
+
   )
 }
