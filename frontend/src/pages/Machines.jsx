@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import machine_icon from "../assets/machine2.png"
 
 export default function Machines() {
     const { lineId } = useParams()
@@ -14,13 +15,11 @@ export default function Machines() {
         return new URL(`../assets/${name}.png`, import.meta.url).href
     }
 
-    console.log(activeMachine)
-
     const image = () => setMachineImg(activeMachine)
 
     return (
-        <div>
-            <div >
+        <div className="h-full">
+            <div className="flex justify-center text-xl font-bold my-2">
                 <h1>{lineId}</h1>
             </div>
             <div className="flex justify-center">
@@ -28,65 +27,56 @@ export default function Machines() {
                     {machines.map((machine, index) => (
                         <li
                             key={index}
-                            className="flex items-center h-20 w-96 mb-4 mr-4 p-3 bg-gray-50 w-50 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-blue-100"
+                            className="flex items-center h-15 w-76 mb-4 mr-4 p-3 bg-gray-50 w-50 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-blue-100"
                             onMouseEnter={() => setActiveMachine(machine)}
                             onClick={() => navigate(`/line/${lineId}/${machine}`)} 
 
                         >
+                            <img className="h-full mr-2" src={machine_icon} alt="" />
                             {machine}
                         </li>
                     ))}
                 </ul>
-                <div className="w-1/2 shadow-md rounded-sm">
+                <div className="w-1/2 shadow-md rounded-sm h-full bg-gray-50">
                     {activeMachine && (
-                        <div>
-                            <h1 className="font-bold text-2xl m-2">
+                        <div className="h-full">
+                           <h1 className="text-xl font-bold my-2 mx-4">
                                 {activeMachine}
-                            </h1>
-                            <p className="m-2">
-                                Name
-                            </p>
-                            <div className="flex justify-center py-10 border-b border-b-gray-200">
-                                <img src={getImageUrl(activeMachine)} alt={activeMachine} />
-                            </div>
-                            <div className="flex gap-4 m-10">
-                                <div className="flex flex-col gap-4 mr-12">
+                           </h1>
+                           <h5 className="text-sm mb-3 mx-4">
+                                panasonic
+                           </h5>
+                           <div className="flex justify-center mb-4 mx-6 border-b border-gray-300 h-1/2">
+                                <img className="mb-4" src={getImageUrl(activeMachine)} alt="" />
+                           </div>
+                           <div className="flex m-4">
+                                <div>
                                     <div>
                                         <h1>
                                             Make
                                         </h1>
-                                        <h1>
-                                            Make name
-                                        </h1>
+                                        <h5>
+                                            Panasonic
+                                        </h5>
                                     </div>
                                     <div>
                                         <h1>
                                             Location
                                         </h1>
-                                        <h1>
-                                            {lineId}
-                                        </h1>
-
-                                    </div>
-                                    <div>
-                                        <h1>
-                                            Description
-                                        </h1>
-                                        <h1>
-                                            Machine Description
-                                        </h1>
-
+                                        <h5>
+                                            SMT-L1
+                                        </h5>
                                     </div>
 
                                 </div>
-                                <div className="flex flex-col gap-4 mr-12">
+                                <div>
                                     <div>
                                         <h1>
-                                            Model
+                                            Modelo
                                         </h1>
-                                        <h1>
-                                            Model name
-                                        </h1>
+                                        <h5>
+                                            NPM-D3A
+                                        </h5>
                                     </div>
                                     <div>
                                         <h1>
@@ -95,16 +85,11 @@ export default function Machines() {
                                         <h1>
                                             Printer
                                         </h1>
-
-                                    </div>
-                                    <div>
-                                        
-
                                     </div>
 
                                 </div>
-                            </div>
-                            
+                           </div>
+                           
                         </div>
                     )}
                 </div>
