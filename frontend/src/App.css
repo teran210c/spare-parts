@@ -10,3 +10,21 @@ body,
   overflow: hidden; /* Evita que el navegador haga scroll doble */
   font-family: 'Inter', sans-serif;
 }
+
+/* Para Chrome, Safari, Edge y Opera */
+.sin-flechas::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Opcional: Asegura el ancho del scrollbar en Webkit */
+.sin-flechas::-webkit-scrollbar {
+  width: 8px; 
+}
+
+/* Estilo para la barra de arrastre */
+.sin-flechas::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* gris claro (gray-300) */
+  border-radius: 4px;
+}

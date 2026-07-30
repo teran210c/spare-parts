@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import imgUrl from "../assets/machine3.png"
 
 export default function MachineDetails() {
     const { lineId, machineId } = useParams()
@@ -9,14 +10,14 @@ export default function MachineDetails() {
     const [selectedPart, setSelectedPart] = useState(null)
 
     useEffect(() => {
-            const fetchSpareParts = async () => {
-                if (!machineId) return;
-            
+        const fetchSpareParts = async () => {
+            if (!machineId) return;
+
             try {
                 // Llamamos al endpoint filtrado por el ID de la máquina
                 const response = await fetch(`http://localhost:5267/api/sparepart/machine/${machineId}`);
                 if (!response.ok) throw new Error("Error al traer los repuestos")
-                
+
                 const data = await response.json();
                 setSpareParts(data);
             } catch (error) {
@@ -25,11 +26,11 @@ export default function MachineDetails() {
                 setLoading(false)
             }
         }
-            fetchSpareParts()
+        fetchSpareParts()
     }, [machineId])
 
     console.log(spareParts)
-    
+
 
     const filteredBoard = spareParts.filter((part) => {
         return (
@@ -39,16 +40,16 @@ export default function MachineDetails() {
     )
 
     return (
-        <div className="flex flex-col items-center pb-4">
+        <div className="flex flex-col items-center h-full">
             <div className="flex flex-col items-center justify-center">
-                <h1 className="m-4 text-5xl">{lineId}</h1>
+                <h1 className="m-4 text-3xl font-bold">{lineId}</h1>
                 {/* <h3 className="text-xl">{machine}</h3> */}
             </div>
-            <div className="flex w-5/6 mt-8">
-                <div className="h-dvh w-180 overflow-y-auto ">
+            <div className="flex w-5/6 mt-2">
+                <div className="w-180 overflow-y-auto">
                     <form
                         onSubmit={e => e.preventDefault()}
-                        
+
                     >
                         <div className="flex items-center border pl-3 pr-3 gap-2 bg-white border-gray-500/30 h-[30px] rounded-md overflow-hidden w-80">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 30 30" fill="#6B7280">
@@ -62,11 +63,15 @@ export default function MachineDetails() {
                             />
                         </div>
                     </form >
-                    <ul>
+                    <ul
+                        className="h-3/5 overflow-y-auto scrollbar-thin sin-flechas w-80"
+                        style={{ direction: 'rtl' }}
+                    >
                         {filteredBoard.map((part) => (
                             <li
                                 key={part.id}
-                                className="mt-3 p-3 bg-gray-300 flex-1 cursor-pointer"
+                                className="mt-1 p-3 bg-stone-100 shadow-sm flex-1 cursor-pointer rounded-sm"
+                                style={{ direction: 'ltr' }}
                                 onClick={() => setSelectedPart(part)}
                             >
                                 <h1>{part.name}</h1>
@@ -76,43 +81,74 @@ export default function MachineDetails() {
                         ))}
                     </ul>
                 </div>
-                    {selectedPart && (
-                        <div className="flex flex-col w-full h-auto mx-8 inset-shadow-sm px-8 py-4 rounded-sm">
-                            <div>
+                {selectedPart && (
+                    <div className="flex flex-col w-full h-10/15 shadow-sm px-8 rounded-sm">
+
+                        <div className="flex h-4/9 mb-6 border-b border-gray-300">
+                            <div className="flex flex-col justify-center">
                                 <h1 className="text-3xl font-bold font-mono text-black-400">{selectedPart.serialNumber}</h1>
                                 <h5 className="text-xl font-semibold mt-1 text-gray-600">{selectedPart.name}</h5>
                             </div>
 
-                            <div className="mt-6 space-y-3 border-t border-slate-400 pt-4 text-sm">
-                                <div className="flex">
-                                    <span className="w-32 text-gray-600 font-semibold">Modelo:</span>
-                                    <span>{selectedPart.model || "N/A"}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 text-gray-600 font-semibold">Proveedor:</span>
-                                    <span>{selectedPart.source || "N/A"}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 text-gray-600 font-semibold">Dueño:</span>
-                                    <span>{selectedPart.owner || "N/A"}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 text-gray-600 font-semibold">Encargado:</span>
-                                    <span>{selectedPart.clerk || "N/A"}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 text-gray-600 font-semibold">Cantidad:</span>
-                                    <span className="font-bold text-emerald-400">{selectedPart.quantity} piezas</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 text-gray-600 font-semibold">Tiempo de Vida:</span>
-                                    <span>{selectedPart.lifeTime ? `${selectedPart.lifeTime} año(s)` : "N/A"}</span>
-                                </div>
-                            </div>
+                            <img className="h-9/10" src={imgUrl} alt="" />
                         </div>
-                    )}
-                
+                        <table className="text-sm text-left rtl:text-right w-2/3">
+                            <tbody>
+                                <tr className="border-b border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">                                    <td>
+                                    Model
+                                </td>
+                                    <td>
+                                        <span>{selectedPart.model || "N/A"}</span>
+                                    </td>
+                                </tr>
+                                <tr className="border-b border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">
+                                    <td>
+                                        Supplier
+                                    </td>
+                                    <td>
+                                        <span>{selectedPart.source || "N/A"}</span>
+                                    </td>
+                                </tr>
+                                <tr className="border-b border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">
+                                    <td>
+                                        Owner
+                                    </td>
+                                    <td>
+                                        <span>{selectedPart.owner || "N/A"}</span>
+                                    </td>
+                                </tr>
+                                <tr className="border-b border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">
+                                    <td>
+                                        Clerk
+                                    </td>
+                                    <td>
+                                        <span>{selectedPart.clerk || "N/A"}</span>
+                                    </td>
+                                </tr>
+                                <tr className="border-b border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">
+                                    <td>
+                                        Amount
+                                    </td>
+                                    <td>
+                                        <span className="font-bold text-emerald-400">{selectedPart.quantity} piezas</span>
+
+                                    </td>
+                                </tr>
+                                <tr className="border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">
+                                    <td>
+                                        Life Span
+                                    </td>
+                                    <td>
+                                        <span>{selectedPart.lifeTime ? `${selectedPart.lifeTime} año(s)` : "N/A"}</span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
             </div>
-        </div>
+        </div >
     )
 }
