@@ -10,5 +10,6 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Machine> Machines { get; set; }
+    public DbSet<Line> Lines { get; set; } 
     public DbSet<SparePart> SpareParts { get; set; }
 }

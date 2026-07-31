@@ -7,7 +7,7 @@ namespace backend.Controllers;
 
 [ApiController]
 // Opción A: Fuerza la ruta exacta de forma manual para evitar que .NET la autogenere con variaciones
-[Route("api/machine")] 
+[Route("api/machine")]
 public class MachineController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -19,12 +19,22 @@ public class MachineController : ControllerBase
 
     // GET: api/machine
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Machine>>> GetMachines()
+    public async Task<ActionResult<IEnumerable<Machine>>> GetMachines([FromQuery] int? lineId)
     {
         try
         {
-            var machines = await _context.Machines.ToListAsync();
+            // Creamos la consulta base (Queryable) sin ejecutarla aún en la DB
+            var query = _context.Machines.AsQueryable();
+
+            // Si el cliente envía un lineId en la URL, agregamos el filtro WHERE
+            if (lineId.HasValue)
+            {
+                query = query.Where(m => m.LineId == lineId.Value);
+            }
+
+            var machines = await query.ToListAsync();
             return Ok(machines);
+
         }
         catch (Exception ex)
         {

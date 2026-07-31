@@ -14,7 +14,7 @@ public class SparePart
     public int? MachineId { get; set; }
 
     [Column("serial_number")]
-    public string? SerialNumber { get; set; }
+    public long? SerialNumber { get; set; }
 
     [Required]
     [Column("name")]

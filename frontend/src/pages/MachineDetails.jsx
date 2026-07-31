@@ -14,12 +14,17 @@ export default function MachineDetails() {
             if (!machineId) return;
 
             try {
-                // Llamamos al endpoint filtrado por el ID de la máquina
+                // Endpoint apuntando al puerto e ID de máquina correspondientes
                 const response = await fetch(`http://localhost:5267/api/sparepart/machine/${machineId}`);
                 if (!response.ok) throw new Error("Error al traer los repuestos")
 
                 const data = await response.json();
                 setSpareParts(data);
+                
+                // Selecciona el primer repuesto por defecto si existen registros
+                if (data.length > 0) {
+                    setSelectedPart(data[0]);
+                }
             } catch (error) {
                 console.error("Error en la petición de repuestos:", error)
             } finally {
@@ -28,8 +33,6 @@ export default function MachineDetails() {
         }
         fetchSpareParts()
     }, [machineId])
-
-    console.log(spareParts)
 
 
     const filteredBoard = spareParts.filter((part) => {
@@ -82,7 +85,7 @@ export default function MachineDetails() {
                     </ul>
                 </div>
                 {selectedPart && (
-                    <div className="flex flex-col w-full h-10/15 shadow-sm px-8 rounded-sm">
+                    <div className="flex flex-col w-full h-100 shadow-sm pl-20 rounded-sm">
 
                         <div className="flex h-4/9 mb-6 border-b border-gray-300">
                             <div className="flex flex-col justify-center">
@@ -90,7 +93,7 @@ export default function MachineDetails() {
                                 <h5 className="text-xl font-semibold mt-1 text-gray-600">{selectedPart.name}</h5>
                             </div>
 
-                            <img className="h-9/10" src={imgUrl} alt="" />
+                            <img className="h-9/10" src={imgUrl} alt="sparepart" />
                         </div>
                         <table className="text-sm text-left rtl:text-right w-2/3">
                             <tbody>
