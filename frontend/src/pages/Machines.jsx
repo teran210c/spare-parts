@@ -7,7 +7,6 @@ import bule_dot from "../assets/blue_location_icon.png"
 export default function Machines() {
     const { lineId } = useParams()
     const [activeMachine, setActiveMachine] = useState(null)
-    const [machineImg, setMachineImg] = useState(null)
     const navigate = useNavigate()
 
 
@@ -16,8 +15,6 @@ export default function Machines() {
     const getImageUrl = (name) => {
         return new URL(`../assets/machine${name}.png`, import.meta.url).href
     }
-
-    const image = () => setMachineImg(activeMachine)
 
     return (
         <div className="h-full">
@@ -49,7 +46,7 @@ export default function Machines() {
                                 panasonic
                             </h5>
                             <div className="flex justify-center mb-4 mx-6 border-b border-gray-300 h-1/2">
-                                <img className="mb-4" src={getImageUrl(activeMachine)} alt="" />
+                                <img className="mb-4" src={getImageUrl(activeMachine)} alt="machine" />
                             </div>
                             <div className="flex justify-around my-6">
                                 <div>

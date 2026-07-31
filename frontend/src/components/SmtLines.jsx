@@ -1,35 +1,20 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Neutral from "../assets/Lines/neutral.png"
-import SMTL5 from "../assets/Lines/A1TS5.png"
-import SMTL3 from "../assets/Lines/A1TS3.png"
-import SMTL2 from "../assets/Lines/A1TS2.png"
-import SMTL1 from "../assets/Lines/A1TS1.png"
+import SMTL5 from "../assets/Lines/SMTL5.png"
+import SMTL3 from "../assets/Lines/SMTL3.png"
+import SMTL2 from "../assets/Lines/SMTL2.png"
+import SMTL1 from "../assets/Lines/SMTL1.png"
 import Chip from "../assets/green_chip.png"
-
-const imageMap = {
-        "SMT-L5": SMTL5,
-        "SMT-L3": SMTL3,
-        "SMT-L2": SMTL2,
-        "SMT-L1": SMTL1
-    }
 
 export default function smtLines() {
     const [activeLine, setActiveLine] = useState(null)
     const navigate = useNavigate()
-    const lines = ["SMT-L5", "SMT-L3", "SMT-L2", "SMT-L1"]
+    const lines = ["L5", "L3", "L2", "L1"]
 
-    useEffect(() => {
-        Object.values(imageMap).forEach((src) => {
-            const img = new Image()
-            img.src = src
-        })
-        const imgNeutral = new Image()
-        imgNeutral.src = Neutral
-    }, [])
-    
-    const currentImage = (activeLine && imageMap[activeLine]) ? imageMap[activeLine] : Neutral
-  
+    const getImageUrl = (name) => {
+        return new URL(`../assets/Lines/SMT${name}.png`, import.meta.url).href
+    }
 
     return (
         <div className="flex flex-1 h-full min-h-0">
@@ -44,17 +29,17 @@ export default function smtLines() {
                     >
                         <img className="h-8 m-2" src={Chip} alt="chip-icon" />
                         <p className="font-bold">
-                            {line}
+                            SMT-{line}
                         </p>
                     </li>
 
                 ))}
             </ul>
 
-            <div className="shadow-lg flex-1 h-full w-full min-w-0 overflow-hidden rounded-sm">
+            <div className="flex justify-center shadow-lg flex-1 h-full w-full min-w-0 overflow-hidden rounded-sm">
                 <img 
-                    className="max-h-full max-w-full object-cover" 
-                    src={currentImage} 
+                    className="h-full w-full object-content" 
+                    src={activeLine ? getImageUrl(activeLine) : Neutral} 
                     alt={activeLine || "neutral lines"} 
                 />
             </div>
