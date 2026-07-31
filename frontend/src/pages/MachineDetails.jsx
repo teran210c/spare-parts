@@ -20,7 +20,7 @@ export default function MachineDetails() {
 
                 const data = await response.json();
                 setSpareParts(data);
-                
+
                 // Selecciona el primer repuesto por defecto si existen registros
                 if (data.length > 0) {
                     setSelectedPart(data[0]);
@@ -36,11 +36,16 @@ export default function MachineDetails() {
 
 
     const filteredBoard = spareParts.filter((part) => {
-        return (
-            part.name.toLowerCase().startsWith(searchTerm.toLowerCase()) || part.serialNumber.startsWith()
-        )
-    }
-    )
+        // Aseguramos que el nombre exista y lo pasamos a minúsculas
+        const nameMatch = part.name ? part.name.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+
+        // Convertimos el número de serie a un String de forma segura antes de buscar
+        const serialStr = part.serialNumber ? String(part.serialNumber) : "";
+        const serialMatch = serialStr.includes(searchTerm);
+
+        return nameMatch || serialMatch;
+    });
+
 
     return (
         <div className="flex flex-col items-center h-full">
@@ -67,7 +72,7 @@ export default function MachineDetails() {
                         </div>
                     </form >
                     <ul
-                        className="h-3/5 overflow-y-auto scrollbar-thin sin-flechas w-80"
+                        className="h-90 overflow-y-auto scrollbar-thin sin-flechas w-80"
                         style={{ direction: 'rtl' }}
                     >
                         {filteredBoard.map((part) => (
@@ -97,9 +102,10 @@ export default function MachineDetails() {
                         </div>
                         <table className="text-sm text-left rtl:text-right w-2/3">
                             <tbody>
-                                <tr className="border-b border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">                                    <td>
-                                    Model
-                                </td>
+                                <tr className="border-b border-gray-300 hover:bg-zinc-200 cursor-pointer h-8">
+                                    <td>
+                                        Model
+                                    </td>
                                     <td>
                                         <span>{selectedPart.model || "N/A"}</span>
                                     </td>

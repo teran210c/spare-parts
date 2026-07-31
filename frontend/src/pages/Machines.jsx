@@ -45,11 +45,15 @@ export default function Machines() {
                 {lineId === "4" ? <h1>SMT-L5</h1> : <h1>SMT-L{lineId}</h1>}
             </div>
             <div className="flex justify-center">
-                <ul>
+                <ul 
+                    className="h-100 overflow-auto scrollbar-thin"
+                    style={{ direction: 'rtl' }}
+                >
                     {machines.map((machine) => (
                         <li
                             key={machine.id}
                             className="flex items-center h-15 w-76 mb-4 mr-4 p-3 bg-gray-50 w-50 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-blue-100"
+                            style={{ direction: 'ltr' }}
                             onMouseEnter={() => setActiveMachine(machine)}
                             onClick={() => navigate(`/line/${lineId}/${machine.id}`)}
 
