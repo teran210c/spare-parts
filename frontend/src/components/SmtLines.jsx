@@ -29,7 +29,7 @@ export default function smtLines() {
                     >
                         <img className="h-8 m-2" src={Chip} alt="chip-icon" />
                         <p className="font-bold">
-                            SMT-{line}
+                            SMT-{line} jeje
                         </p>
                     </li>
 
