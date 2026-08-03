@@ -1,11 +1,57 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import SmtLines from "../components/SmtLines"
-import DIP from "../components/DipLines"
+import GreenChip from "../assets/green_chip.png"
+import BlueChip from "../assets/blue_chip.png"
+import Neutral from "../assets/Lines/SMT/neutral.png"
 
+const imagesJson = import.meta.glob("../assets/Lines/**/*.png", { eager: true })
 
 export default function Lines() {
     const [selectedDept, setSelectedDept] = useState("SMT")
+    const [lines, setLines] = useState([])
+    const [activeLine, setActiveLine] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setLoading(true)
+        setActiveLine(null) // Resetea la imagen activa al cambiar de pestaña
+
+        fetch(`http://localhost:5267/api/lines?dept=${selectedDept}`)
+            .then((res) => {
+                if (!res.ok) throw new Error("Error fetching lines")
+                return res.json()
+            })
+            .then((data) => {
+                setLines(data) // Guarda las líneas ya ordenadas por tu backend
+                setLoading(false)
+            })
+            .catch((err) => {
+                console.error(err)
+                setLines([])
+                setLoading(false)
+            })
+    }, [selectedDept])
+
+    const getImageUrl = (name) => {
+        const folder = selectedDept === "SMT" ? "SMT" : "DIP"
+        
+        if (!name) {
+            const neutralPath = `../assets/Lines/${folder}/neutral.png`
+            return imagesJson[neutralPath]?.default || ""
+        }
+
+        const fullPath = `../assets/Lines/${folder}/${name}.png`
+        
+        return imagesJson[fullPath]?.default || ""
+    }
+
+    const isSMT = selectedDept === "SMT"
+    const hoverBg = isSMT ? "hover:bg-lime-50" : "hover:bg-indigo-50"
+    const chipIcon = isSMT ? GreenChip : BlueChip
+
+    console.log(activeLine)
+
 
 
     return (
@@ -37,10 +83,37 @@ export default function Lines() {
                 </h1>
             </div>
             <div className="flex-1 min-h-0 w-full flex flex-col m-8 items-center">
-                {selectedDept === "SMT" && <SmtLines />}
-                {selectedDept === "DIP" && <DIP />}
-            </div>
-            
+                {loading ? (
+                    <div className="text-gray-400 font-semibold text-lg animate-pulse">Loading lines...</div>
+                ) : (
+                    <div className="flex flex-1 h-full min-h-0 w-full">
+                        <ul className="overflow-y-auto shrink-0 pr-2">
+                            {lines.map((line) => (
+                                <li
+                                    key={line.id}
+                                    className={`flex items-center h-16 w-64 mb-4 mr-4 p-3 bg-zinc-50 rounded-lg shadow-md cursor-pointer duration-200 ${hoverBg}`}
+                                    onMouseEnter={() => setActiveLine(line.name)}
+                                    onMouseLeave={() => setActiveLine(null)}
+                                    onClick={() => navigate(`/line/${line.id}`)}
+                                >
+                                    <img className="h-8 m-2" src={chipIcon} alt="chip-icon" />
+                                    <p className="font-bold">
+                                        {isSMT ? `SMT-${line.name}` : line.name}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="flex justify-center shadow-lg flex-1 h-full w-full min-w-0 overflow-hidden rounded-md bg-zinc-100">
+                            <img 
+                                className="max-h-full max-w-full object-contain" 
+                                src={activeLine ? getImageUrl(activeLine) : Neutral} 
+                                alt={activeLine || "neutral lines"} 
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>            
         </div>
     )
 }
