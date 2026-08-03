@@ -33,26 +33,25 @@ export default function Lines() {
             })
     }, [selectedDept])
 
-    const getImageUrl = (name) => {
-        const folder = selectedDept === "SMT" ? "SMT" : "DIP"
-        
+    const getImageUrl = (name, dept) => {
+        // Forzamos a usar el departamento exacto que le pasemos
+        const folder = dept === "SMT" ? "SMT" : "DIP"
+
+        // Si no hay hover, resuelve el neutral de la carpeta correspondiente
         if (!name) {
             const neutralPath = `../assets/Lines/${folder}/neutral.png`
-            return imagesJson[neutralPath]?.default || ""
+            return imagesJson[neutralPath]?.default || null
         }
 
+        // Si hay hover, resuelve la línea activa
         const fullPath = `../assets/Lines/${folder}/${name}.png`
-        
-        return imagesJson[fullPath]?.default || ""
+        return imagesJson[fullPath]?.default || null
     }
+
 
     const isSMT = selectedDept === "SMT"
     const hoverBg = isSMT ? "hover:bg-lime-50" : "hover:bg-indigo-50"
     const chipIcon = isSMT ? GreenChip : BlueChip
-
-    console.log(activeLine)
-
-
 
     return (
         <div className="flex flex-col flex-1 w-full min-h-0">
@@ -86,31 +85,37 @@ export default function Lines() {
                 {loading ? (
                     <div className="text-gray-400 font-semibold text-lg animate-pulse">Loading lines...</div>
                 ) : (
-                    <div className="flex flex-1 h-full min-h-0 w-full">
-                        <ul className="overflow-y-auto shrink-0 pr-2">
+                    <div className="flex justify-center">
+                        <ul 
+                            className="overflow-y-auto scrollbar-thin h-7/12 shrink-0 pr-2"
+                            style={{ direction: 'rtl' }}                        
+                        >
                             {lines.map((line) => (
                                 <li
                                     key={line.id}
-                                    className={`flex items-center h-16 w-64 mb-4 mr-4 p-3 bg-zinc-50 rounded-lg shadow-md cursor-pointer duration-200 ${hoverBg}`}
+                                    className={`flex items-center h-14 w-64 mb-2 mr-4 p-3 bg-zinc-50 rounded-lg shadow-md cursor-pointer duration-200 ${hoverBg}`}
                                     onMouseEnter={() => setActiveLine(line.name)}
                                     onMouseLeave={() => setActiveLine(null)}
                                     onClick={() => navigate(`/line/${line.id}`)}
+                                    style={{ direction: 'ltr' }}
+                                    
                                 >
-                                    <img className="h-8 m-2" src={chipIcon} alt="chip-icon" />
+                                    <img className="h-6 m-2" src={chipIcon} alt="chip-icon" />
                                     <p className="font-bold">
                                         {isSMT ? `SMT-${line.name}` : line.name}
                                     </p>
                                 </li>
                             ))}
-                        </ul>
+                            </ul>
+                            <div className="flex justify-center shadow-lg h-7/12 min-w-0 overflow-hidden rounded-md bg-zinc-100">
+                                <img
+                                    className="h-full max-w-full object-fil"
+                                    // ⚡ Pasamos selectedDept para forzar la actualización instantánea de la carpeta
+                                    src={getImageUrl(activeLine, selectedDept)}
+                                    alt={activeLine || `${selectedDept} neutral layout`}
+                                />
+                            </div>
 
-                        <div className="flex justify-center shadow-lg flex-1 h-full w-full min-w-0 overflow-hidden rounded-md bg-zinc-100">
-                            <img 
-                                className="max-h-full max-w-full object-contain" 
-                                src={activeLine ? getImageUrl(activeLine) : Neutral} 
-                                alt={activeLine || "neutral lines"} 
-                            />
-                        </div>
                     </div>
                 )}
             </div>            
