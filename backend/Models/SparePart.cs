@@ -40,4 +40,19 @@ public class SparePart
 
     [Column("image_url")]
     public string? ImageUrl { get; set; }
+
+    [Column("location")]
+    public string? Location { get; set; }
+
+    [Column("supplier")]
+    public string? Supplier { get; set; }
+
+    [Column("brand")]
+    public string? Brand { get; set; }
+
+    [Column("area")]
+    public string? Area { get; set; }
+
+    [Column("description")]
+    public string? Description { get; set; }
 }
