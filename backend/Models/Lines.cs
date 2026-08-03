@@ -20,6 +20,10 @@ namespace backend.Models
         [StringLength(255)]
         public string? Dept { get; set; }
 
+        [Column("position")]
+        public int Position { get; set; }
+
+
         // Relación: Una línea tiene muchas máquinas
         [JsonIgnore] // Evita bucles infinitos al serializar a JSON
         public virtual ICollection<Machine> Machines { get; set; } = new List<Machine>();
