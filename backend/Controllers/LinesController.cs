@@ -18,23 +18,15 @@ namespace backend.Controllers
 
         // GET: api/lines
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Line>>> GetLines()
+        public async Task<ActionResult<IEnumerable<Line>>> GetLines([FromQuery] string dept)
         {
-            return await _context.Lines.ToListAsync();
+            var resultado = await _context.Lines
+                .Where(l => l.Dept == dept)
+                .OrderBy(l => l.Position)
+                .ToListAsync();
+
+            return Ok(resultado);
         }
 
-        // GET: api/lines/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Line>> GetLine(int id)
-        {
-            var line = await _context.Lines.FindAsync(id);
-
-            if (line == null)
-            {
-                return NotFound(new { message = "Línea no encontrada" });
-            }
-
-            return line;
-        }
     }
 }
