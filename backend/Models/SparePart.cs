@@ -11,41 +11,16 @@ public class SparePart
     public int Id { get; set; }
 
     [Column("machine_id")]
-    public int? MachineId { get; set; }
-
-    [Column("serial_number")]
-    public long? SerialNumber { get; set; }
-
-    [Required]
-    [Column("name")]
-    public string Name { get; set; } = string.Empty;
-
-    [Column("model")]
-    public string? Model { get; set; }
-
-    [Column("source")]
-    public string? Source { get; set; }
-
-    [Column("owner")]
-    public string? Owner { get; set; }
-
-    [Column("clerk")]
-    public string? Clerk { get; set; }
-
-    [Column("quantity")]
-    public int Quantity { get; set; } = 0;
-
-    [Column("life_time")]
-    public int? LifeTime { get; set; }
-
-    [Column("image_url")]
-    public string? ImageUrl { get; set; }
+    public int? MachineId { get; set; } // Apunta al ID de 'Printer' o 'NPM' en tu BD de Neon
 
     [Column("location")]
     public string? Location { get; set; }
 
-    [Column("supplier")]
-    public string? Supplier { get; set; }
+    [Column("part_number_mpx")]
+    public string? PartNumberMpx { get; set; }
+
+    [Column("part_number_supplier")]
+    public string? PartNumberSupplier { get; set; }
 
     [Column("brand")]
     public string? Brand { get; set; }
@@ -53,6 +28,24 @@ public class SparePart
     [Column("area")]
     public string? Area { get; set; }
 
-    [Column("description")]
-    public string? Description { get; set; }
+    [Column("description_usa")]
+    public string? DescriptionUsa { get; set; }
+
+    [Column("description_mex")]
+    public string? DescriptionMex { get; set; }
+
+    [Column("image_url")]
+    public string? ImageUrl { get; set; }
+
+    [Column("quantity")]
+    public int Quantity { get; set; } = 0; // Columna INV
+
+    [Column("min_stock")]
+    public int MinStock { get; set; } = 0;
+
+    [Column("max_stock")]
+    public int MaxStock { get; set; } = 0;
+
+    [Column("status")]
+    public string? Status { get; set; }
 }
