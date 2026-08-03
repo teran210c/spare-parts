@@ -11,7 +11,7 @@ public class SparePart
     public int Id { get; set; }
 
     [Column("machine_id")]
-    public int? MachineId { get; set; } // Apunta al ID de 'Printer' o 'NPM' en tu BD de Neon
+    public int? MachineId { get; set; }
 
     [Column("location")]
     public string? Location { get; set; }
@@ -38,7 +38,7 @@ public class SparePart
     public string? ImageUrl { get; set; }
 
     [Column("quantity")]
-    public int Quantity { get; set; } = 0; // Columna INV
+    public int Quantity { get; set; } = 0; // Representa el campo INV
 
     [Column("min_stock")]
     public int MinStock { get; set; } = 0;
