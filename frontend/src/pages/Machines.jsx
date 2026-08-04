@@ -39,6 +39,14 @@ export default function Machines() {
         return <div className="flex justify-center items-center h-full text-xl font-bold">Loading Machine...</div>
     }
 
+    const getMachineImageUrl = (name) => {
+        return new URL(`../assets/machines/${name}.webp`, import.meta.url).href
+    }
+
+      if (loading) {
+        return <div className="flex justify-center items-center h-full text-xl font-bold">Loading Machine...</div>
+    }
+
     return (
         <div className="h-full">
             <div className="flex justify-center text-3xl font-bold my-2">
@@ -73,7 +81,7 @@ export default function Machines() {
                                 {activeMachine.brand || "Generic"}
                             </h5>
                             <div className="flex justify-center mb-4 mx-6 border-b border-gray-300 h-48 overflow-hidden">
-                                <img className="mb-4 object-contain h-full" src={getImageUrl(activeMachine.name)} alt="machine" />
+                                <img className="mb-4 object-contain h-full" src={getMachineImageUrl(activeMachine.name.toLowerCase())} alt="machine" />
                             </div>
                             <div className="flex justify-around my-6">
                                 <div>
