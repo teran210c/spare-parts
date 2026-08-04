@@ -17,29 +17,25 @@ public class MachineController : ControllerBase
         _context = context;
     }
 
-    // GET: api/machine
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Machine>>> GetMachines([FromQuery] int? lineId)
-    {
-        try
+   [HttpGet]
+public async Task<ActionResult> GetMachinesByLine([FromQuery] int lineId)
+{
+    var machines = await _context.Machines
+        .Where(m => m.LineId == lineId)
+        .Select(m => new 
         {
-            // Creamos la consulta base (Queryable) sin ejecutarla aún en la DB
-            var query = _context.Machines.AsQueryable();
+            id = m.Id,
+            name = m.Name, // Ej: "Printer - Línea 1"
+            // Buscamos la marca cruzando los datos con su catálogo técnico
+            brand = _context.MachineModels
+                            .Where(mm => mm.Id == m.MachineModelId)
+                            .Select(mm => mm.Brand)
+                            .FirstOrDefault() ?? "Generic"
+        })
+        .ToListAsync();
 
-            // Si el cliente envía un lineId en la URL, agregamos el filtro WHERE
-            if (lineId.HasValue)
-            {
-                query = query.Where(m => m.LineId == lineId.Value);
-            }
+    return Ok(machines);
+}
 
-            var machines = await query.ToListAsync();
-            return Ok(machines);
 
-        }
-        catch (Exception ex)
-        {
-            // Si hay un error con el DbContext o Neon, lo atrapará aquí
-            return StatusCode(500, $"Error interno: {ex.Message}");
-        }
-    }
 }

@@ -10,9 +10,6 @@ public class SparePart
     [Column("id")]
     public int Id { get; set; }
 
-    [Column("machine_id")]
-    public int? MachineId { get; set; }
-
     [Column("location")]
     public string? Location { get; set; }
 
@@ -38,7 +35,7 @@ public class SparePart
     public string? ImageUrl { get; set; }
 
     [Column("quantity")]
-    public int Quantity { get; set; } = 0; // Representa el campo INV
+    public int Quantity { get; set; } = 0;
 
     [Column("min_stock")]
     public int MinStock { get; set; } = 0;
@@ -48,4 +45,7 @@ public class SparePart
 
     [Column("status")]
     public string? Status { get; set; }
+
+    // Relación Muchos a Muchos automática con Modelos (Administra model_spare_part)
+    public virtual ICollection<MachineModel> MachineModels { get; set; } = new List<MachineModel>();
 }
