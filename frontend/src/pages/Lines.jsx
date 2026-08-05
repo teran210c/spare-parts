@@ -15,7 +15,7 @@ export default function Lines() {
 
     useEffect(() => {
         setLoading(true)
-        setActiveLine(null) // Resetea la imagen activa al cambiar de pestaña
+        setActiveLine(null)
 
         fetch(`http://localhost:5267/api/lines?dept=${selectedDept}`)
             .then((res) => {
@@ -23,7 +23,7 @@ export default function Lines() {
                 return res.json()
             })
             .then((data) => {
-                setLines(data) // Guarda las líneas ya ordenadas por tu backend
+                setLines(data)
                 setLoading(false)
             })
             .catch((err) => {
@@ -43,7 +43,7 @@ export default function Lines() {
 
             if (imgUrl) {
                 const img = new Image()
-                img.src = imgUrl // Forzamos al navegador a cachearla de inmediato
+                img.src = imgUrl
             }
         })
     }, [lines, selectedDept])
@@ -63,91 +63,99 @@ export default function Lines() {
     const chipIcon = isSMT ? GreenChip : BlueChip
 
     return (
-        <div className="flex flex-col flex-1 w-full min-h-0">
+        // 1. EL PADRE: Ahora es un Grid vertical (Fila 1: Cabecera/Filtros, Fila 2: El espacio de trabajo)
+        <div className="grid grid-rows-[auto_1fr] w-full h-full min-h-0 p-4 gap-2">
 
-            <div className="flex justify-center w-full my-2">
-                <button
-                    onClick={() => setSelectedDept("SMT")}
-                    className={`px-6 py-1.5 w-1/9 bg-[#2d3748] text-white font-semibold rounded-l-lg border border-transparent shadow-sm transition-all duration-200 hover:bg-[#3a475c] active:scale-95 ${selectedDept === "SMT"
-                        ? "bg-[#2d3748] text-white shadow-sm border border-transparent hover:bg-[#3a475c]"
-                        : "bg-slate-800/40 text-gray-400 border border-slate-700/50 hover:text-white"
-                        }`}
-                >
-                    SMT
-                </button>
-                <button
-                    onClick={() => setSelectedDept("DIP")}
-                    className={`px-6 py-1.5 w-1/9 bg-[#2d3748] text-white font-semibold rounded-r-lg border border-transparent shadow-sm transition-all duration-200 hover:bg-[#3a475c] active:scale-95 ${selectedDept === "DIP"
-                        ? "bg-[#2d3748] text-white shadow-sm border border-transparent hover:bg-[#3a475c]"
-                        : "bg-slate-800/40 text-gray-400 border border-slate-700/50 hover:text-white"
-                        }`}
-                >
-                    DIP
-                </button>
-            </div>
-            <div className="flex justify-center text-xl font-bold mb-1">
-                <h1>
-                    SELECT LINE
+            {/* ZONA DE CONTROL (Botones superiores y Título) */}
+            <div className="flex flex-col items-center justify-center w-full">
+                <div className="flex justify-center w-full mb-2">
+                    <button
+                        onClick={() => setSelectedDept("SMT")}
+                        className={`px-6 py-1.5 w-24 bg-[#2d3748] text-white font-semibold rounded-l-lg border border-transparent shadow-sm transition-all duration-200 hover:bg-[#3a475c] active:scale-95 ${selectedDept === "SMT"
+                            ? "bg-[#2d3748] text-white shadow-sm border border-transparent hover:bg-[#3a475c]"
+                            : "bg-slate-800/40 text-gray-400 border border-slate-700/50 hover:text-white"
+                            }`}
+                    >
+                        SMT
+                    </button>
+                    <button
+                        onClick={() => setSelectedDept("DIP")}
+                        className={`px-6 py-1.5 w-24 bg-[#2d3748] text-white font-semibold rounded-r-lg border border-transparent shadow-sm transition-all duration-200 hover:bg-[#3a475c] active:scale-95 ${selectedDept === "DIP"
+                            ? "bg-[#2d3748] text-white shadow-sm border border-transparent hover:bg-[#3a475c]"
+                            : "bg-slate-800/40 text-gray-400 border border-slate-700/50 hover:text-white"
+                            }`}
+                    >
+                        DIP
+                    </button>
+                </div>
+                <h1 className="text-xl font-bold tracking-wider text-slate-800 uppercase">
+                    Select Line
                 </h1>
             </div>
 
-                <div className="justify-center min-h-0 w-9/10 flex mx-8 items-center">
+            {/* 2. ZONA DE TRABAJO DINÁMICA: 
+               En móvil es 1 columna hacia abajo. En PC (md:) divide la lista (280px) y el plano (1fr) */}
+            <div className="grid grid-cols-[280px_1fr] gap-6 w-full h-full min-h-0 overflow-hidden px-4">
+                
+                {/* SECCIÓN IZQUIERDA: Listado de líneas */}
+                <div className="w-full h-full min-h-0 flex justify-center md:justify-start overflow-hidden">
                     {loading ? (
-                        <div className="text-gray-400 font-semibold text-lg animate-pulse">Loading lines...</div>
+                        <div className="text-gray-400 font-semibold text-lg animate-pulse m-auto">Loading lines...</div>
                     ) : (
-                        <div className="flex justify-center h-9/10">
-                            <ul
-                                className="overflow-y-auto overflow-x-hidden scrollbar-thin  shrink-0 pr-2"
-                                style={{ direction: 'rtl' }}
-                            >
-                                {lines.map((line) => (
-                                    <li
-                                        key={line.id}
-                                        className={`flex items-center h-14 w-64 mb-2 mr-4 p-3 bg-zinc-50 rounded-lg shadow-md cursor-pointer duration-200 ${hoverBg}`}
-                                        onMouseEnter={() => setActiveLine(line.name)}
-                                        onMouseLeave={() => setActiveLine(null)}
-                                        onClick={() => navigate(`/line/${line.id}`)}
-                                        style={{ direction: 'ltr' }}
-
-                                    >
-                                        <img className="h-6 m-2" src={chipIcon} alt="chip-icon" />
-                                        <p className="font-bold">
-                                            {isSMT ? `SMT-${line.name}` : line.name}
-                                        </p>
-                                    </li>
-                                ))}
-                            </ul>
-
-                        </div>
+                        <ul
+                            className="w-full h-full overflow-y-auto overflow-x-hidden pr-2"
+                            style={{ direction: 'rtl' }}
+                        >
+                            {lines.map((line) => (
+                                <li
+                                    key={line.id}
+                                    className={`flex items-center h-14 w-full max-w-[260px] mb-2 p-3 bg-white rounded-xl shadow-xs cursor-pointer border border-slate-100 duration-200 ml-auto ${hoverBg}`}
+                                    onMouseEnter={() => setActiveLine(line.name)}
+                                    onMouseLeave={() => setActiveLine(null)}
+                                    onClick={() => navigate(`/line/${line.id}`)}
+                                    style={{ direction: 'ltr' }}
+                                >
+                                    <img className="h-6 mr-3" src={chipIcon} alt="chip-icon" />
+                                    <p className="font-bold text-slate-700">
+                                        {isSMT ? `SMT-${line.name}` : line.name}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
                     )}
-                    <div className="h-9/10 w-6/10 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center p-6 overflow-hidden">
-                        <div className="relative w-full h-full max-w-4xl max-h-[80vh] flex items-center justify-center">
+                </div>
 
-                            {/* Capa Base: Imagen Neutral Siempre visible */}
-                            <img
-                                src={getImageUrl(null, selectedDept)}
-                                alt={`Mapa Neutral ${selectedDept}`}
-                                className="w-full h-full object-fill select-none pointer-events-none"
-                            />
+                {/* SECCIÓN DERECHA: Contenedor Blanco del Plano */}
+                <div className="w-full h-8/10 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center p-4 overflow-hidden">
+                    <div className="relative w-full h-full flex items-center justify-center">
 
-                            {/* Capas Pre-renderizadas: Todas están en el DOM, su opacidad cambia instantáneamente */}
-                            {!loading && lines.map((line) => {
-                                const imgUrl = getImageUrl(line.name, selectedDept)
-                                if (!imgUrl) return null
+                        {/* Capa Base: Imagen Neutral */}
+                        <img
+                            src={getImageUrl(null, selectedDept)}
+                            alt={`Mapa Neutral ${selectedDept}`}
+                            className="w-full h-full object-contain select-none pointer-events-none"
+                        />
 
-                                return (
-                                    <img
-                                        key={line.id}
-                                        src={imgUrl}
-                                        alt={`Línea ${line.name}`}
-                                        className={`absolute top-0 left-0 w-full h-full object-fill select-none pointer-events-none transition-opacity duration-75 ${activeLine === line.name ? "opacity-100 z-10" : "opacity-0 z-0"
-                                            }`}
-                                    />
-                                )
-                            })}
-                        </div>
+                        {/* Capas Pre-renderizadas */}
+                        {!loading && lines.map((line) => {
+                            const imgUrl = getImageUrl(line.name, selectedDept)
+                            if (!imgUrl) return null
+
+                            return (
+                                <img
+                                    key={line.id}
+                                    src={imgUrl}
+                                    alt={`Línea ${line.name}`}
+                                    className={`absolute top-0 left-0 w-full h-full object-contain select-none pointer-events-none transition-opacity duration-75 ${activeLine === line.name ? "opacity-100 z-10" : "opacity-0 z-0"
+                                        }`}
+                                />
+                            )
+                            
+                        })}
                     </div>
                 </div>
+
             </div>
+        </div>
     )
 }

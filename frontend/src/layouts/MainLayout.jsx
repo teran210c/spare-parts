@@ -6,12 +6,12 @@ import Sidebar from '../components/Sidebar'
 export default function MainLayout() {
   return (
 
-    <div className='flex flex-col h-screen w-screen flex-col overflow-hidden bg-neutral-100'>
-       <nav className="h-1/12">
+    <div className='grid grid-rows-[45px_1fr] h-full w-full bg-zinc-100'>
+       <nav className="w-full h-full">
         <Navabar />
       </nav>
 
-      <main className="flex-1 min-h-0 w-full flex flex-col overflow-hidden">
+      <main className="w-full h-full">
         <Outlet />        
       </main>
       

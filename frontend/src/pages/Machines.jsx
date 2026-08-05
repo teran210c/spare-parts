@@ -54,7 +54,7 @@ export default function Machines() {
             </div>
             <div className="flex justify-center">
                 <ul 
-                    className="h-100 overflow-auto scrollbar-thin"
+                    className="h-120 overflow-auto scrollbar-thin"
                     style={{ direction: 'rtl' }}
                 >
                     {machines.map((machine) => (
@@ -71,7 +71,7 @@ export default function Machines() {
                         </li>
                     ))}
                 </ul>
-                <div className="w-1/3 shadow-md rounded-sm h-full bg-gray-50">
+                <div className="w-5/10 shadow-md rounded-sm h-full bg-gray-50">
                     {activeMachine && (
                         <div className="h-full">
                             <h1 className="text-xl font-bold mt-2 mx-4">
